@@ -33,7 +33,7 @@ import static com.google.common.base.Preconditions.*;
 /**
  * <p>The Context object holds various objects and pieces of configuration that are scoped to a specific instantiation of
  * bitcoinj for a specific network. You can get an instance of this class through calling {@link #get()}.</p>
- *
+ * <p>
  * <p>Context is new in 0.13 and the library is currently in a transitional period: you should create a Context that
  * wraps your chosen network parameters before using the rest of the library. However if you don't, things will still
  * work as a Context will be created for you and stashed in thread local storage. The context is then propagated between
@@ -65,9 +65,9 @@ public class Context {
     /**
      * Creates a new custom context object. This is mainly meant for unit tests for now.
      *
-     * @param params The network parameters that will be associated with this context.
-     * @param eventHorizon Number of blocks after which the library will delete data and be unable to always process reorgs (see {@link #getEventHorizon()}.
-     * @param feePerKb The default fee per 1000 bytes of transaction data to pay when completing transactions. For details, see {@link SendRequest#feePerKb}.
+     * @param params               The network parameters that will be associated with this context.
+     * @param eventHorizon         Number of blocks after which the library will delete data and be unable to always process reorgs (see {@link #getEventHorizon()}.
+     * @param feePerKb             The default fee per 1000 bytes of transaction data to pay when completing transactions. For details, see {@link SendRequest#feePerKb}.
      * @param ensureMinRequiredFee Whether to ensure the minimum required fee by default when completing transactions. For details, see {@link SendRequest#ensureMinRequiredFee}.
      */
     public Context(NetworkParameters params, int eventHorizon, Coin feePerKb, boolean ensureMinRequiredFee) {

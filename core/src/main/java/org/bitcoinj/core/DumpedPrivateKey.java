@@ -34,16 +34,13 @@ public class DumpedPrivateKey extends VersionedChecksummedBytes {
 
     /**
      * Construct a private key from its Base58 representation.
-     * @param params
-     *            The expected NetworkParameters or null if you don't want validation.
-     * @param base58
-     *            The textual form of the private key.
-     * @throws AddressFormatException
-     *             if the given base58 doesn't parse or the checksum is invalid
-     * @throws WrongNetworkException
-     *             if the given private key is valid but for a different chain (eg testnet vs mainnet)
+     *
+     * @param params The expected NetworkParameters or null if you don't want validation.
+     * @param base58 The textual form of the private key.
+     * @throws AddressFormatException if the given base58 doesn't parse or the checksum is invalid
+     * @throws WrongNetworkException  if the given private key is valid but for a different chain (eg testnet vs mainnet)
      */
-    public static DumpedPrivateKey fromBase58(@Nullable NetworkParameters params,String base58) throws AddressFormatException {
+    public static DumpedPrivateKey fromBase58(@Nullable NetworkParameters params, String base58) throws AddressFormatException {
         return new DumpedPrivateKey(params, base58);
     }
 
@@ -66,12 +63,14 @@ public class DumpedPrivateKey extends VersionedChecksummedBytes {
         }
     }
 
-    /** @deprecated Use {@link #fromBase58(NetworkParameters, String)} */
+    /**
+     * @deprecated Use {@link #fromBase58(NetworkParameters, String)}
+     */
     @Deprecated
     public DumpedPrivateKey(@Nullable NetworkParameters params, String encoded) throws AddressFormatException {
         super(encoded);
         if (params != null && version != params.getDumpedPrivateKeyHeader())
-            throw new WrongNetworkException(version, new int[]{ params.getDumpedPrivateKeyHeader() });
+            throw new WrongNetworkException(version, new int[]{params.getDumpedPrivateKeyHeader()});
         if (bytes.length == 33 && bytes[32] == 1) {
             compressed = true;
             bytes = Arrays.copyOf(bytes, 32);  // Chop off the additional marker byte.

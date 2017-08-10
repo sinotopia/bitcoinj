@@ -26,11 +26,11 @@ import java.util.concurrent.*;
 
 /**
  * <p>Supports peer discovery through DNS.</p>
- *
+ * <p>
  * <p>Failure to resolve individual host names will not cause an Exception to be thrown.
  * However, if all hosts passed fail to resolve a PeerDiscoveryException will be thrown during getPeers().
  * </p>
- *
+ * <p>
  * <p>DNS seeds do not attempt to enumerate every peer on the network. {@link DnsDiscovery#getPeers(long, long, TimeUnit)}
  * will return up to 30 random peers from the set of those returned within the timeout period. If you want more peers
  * to connect to, you need to discover them via other means (like addr broadcasts).</p>
@@ -49,7 +49,7 @@ public class DnsDiscovery extends MultiplexingDiscovery {
      * Supports finding peers through DNS A records.
      *
      * @param dnsSeeds Host names to be examined for seed addresses.
-     * @param params Network parameters to be used for port information.
+     * @param params   Network parameters to be used for port information.
      */
     public DnsDiscovery(String[] dnsSeeds, NetworkParameters params) {
         super(params, buildDiscoveries(params, dnsSeeds));
@@ -73,7 +73,9 @@ public class DnsDiscovery extends MultiplexingDiscovery {
             return Executors.newFixedThreadPool(seeds.size(), new DaemonThreadFactory("DNS seed lookups"));
     }
 
-    /** Implements discovery from a single DNS host. */
+    /**
+     * Implements discovery from a single DNS host.
+     */
     public static class DnsSeedDiscovery implements PeerDiscovery {
         private final String hostname;
         private final NetworkParameters params;

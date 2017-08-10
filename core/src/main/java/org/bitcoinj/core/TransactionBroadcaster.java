@@ -21,6 +21,8 @@ package org.bitcoinj.core;
  * by {@link org.bitcoinj.core.PeerGroup}.
  */
 public interface TransactionBroadcaster {
-    /** Broadcast the given transaction on the network */
+    /**
+     * Broadcast the given transaction on the network
+     */
     TransactionBroadcast broadcastTransaction(final Transaction tx);
 }

@@ -21,12 +21,13 @@ import javax.annotation.Nullable;
 /**
  * <p>Represents a Message type that can be contained within another Message.  ChildMessages that have a cached
  * backing byte array need to invalidate their parent's caches as well as their own if they are modified.</p>
- * 
+ * <p>
  * <p>Instances of this class are not safe for use by multiple threads.</p>
  */
 public abstract class ChildMessage extends Message {
 
-    @Nullable protected Message parent;
+    @Nullable
+    protected Message parent;
 
     /**
      * @deprecated Use {@link #ChildMessage(NetworkParameters)} instead.
@@ -77,7 +78,7 @@ public abstract class ChildMessage extends Message {
         if (parent != null)
             parent.unCache();
     }
-    
+
     protected void adjustLength(int adjustment) {
         adjustLength(0, adjustment);
     }

@@ -52,7 +52,8 @@ public class MultiplexingDiscovery implements PeerDiscovery {
     /**
      * Builds a suitable set of peer discoveries. Will query them in parallel before producing a merged response.
      * If specific services are required, DNS is not used as the protocol can't handle it.
-     * @param params Network to use.
+     *
+     * @param params   Network to use.
      * @param services Required services as a bitmask, e.g. {@link VersionMessage#NODE_NETWORK}.
      */
     public static MultiplexingDiscovery forServices(NetworkParameters params, long services) {
@@ -91,7 +92,7 @@ public class MultiplexingDiscovery implements PeerDiscovery {
                 tasks.add(new Callable<InetSocketAddress[]>() {
                     @Override
                     public InetSocketAddress[] call() throws Exception {
-                        return seed.getPeers(services, timeoutValue,  timeoutUnit);
+                        return seed.getPeers(services, timeoutValue, timeoutUnit);
                     }
                 });
             }

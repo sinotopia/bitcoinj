@@ -77,7 +77,7 @@ public class Sha256Hash implements Serializable, Comparable<Sha256Hash> {
      * @param hexString a hash value represented as a hex string
      * @return a new instance
      * @throws IllegalArgumentException if the given string is not a valid
-     *         hex string, or if it does not represent exactly 32 bytes
+     *                                  hex string, or if it does not represent exactly 32 bytes
      */
     public static Sha256Hash wrap(String hexString) {
         return wrap(Utils.HEX.decode(hexString));
@@ -95,7 +95,9 @@ public class Sha256Hash implements Serializable, Comparable<Sha256Hash> {
         return wrap(Utils.reverseBytes(rawHashBytes));
     }
 
-    /** Use {@link #of(byte[])} instead: this old name is ambiguous. */
+    /**
+     * Use {@link #of(byte[])} instead: this old name is ambiguous.
+     */
     @Deprecated
     public static Sha256Hash create(byte[] contents) {
         return of(contents);
@@ -111,7 +113,9 @@ public class Sha256Hash implements Serializable, Comparable<Sha256Hash> {
         return wrap(hash(contents));
     }
 
-    /** Use {@link #twiceOf(byte[])} instead: this old name is ambiguous. */
+    /**
+     * Use {@link #twiceOf(byte[])} instead: this old name is ambiguous.
+     */
     @Deprecated
     public static Sha256Hash createDouble(byte[] contents) {
         return twiceOf(contents);
@@ -129,7 +133,7 @@ public class Sha256Hash implements Serializable, Comparable<Sha256Hash> {
 
     /**
      * Creates a new instance containing the calculated (one-time) hash of the given file's contents.
-     *
+     * <p>
      * The file contents are read fully into memory, so this method should only be used with small files.
      *
      * @param file the file on which the hash value is calculated
@@ -147,7 +151,7 @@ public class Sha256Hash implements Serializable, Comparable<Sha256Hash> {
 
     /**
      * Returns a new SHA-256 MessageDigest instance.
-     *
+     * <p>
      * This is a convenience method which wraps the checked
      * exception that can never occur with a RuntimeException.
      *
@@ -174,7 +178,7 @@ public class Sha256Hash implements Serializable, Comparable<Sha256Hash> {
     /**
      * Calculates the SHA-256 hash of the given byte range.
      *
-     * @param input the array containing the bytes to hash
+     * @param input  the array containing the bytes to hash
      * @param offset the offset within the array of the bytes to hash
      * @param length the number of bytes to hash
      * @return the hash (in big-endian order)
@@ -200,7 +204,7 @@ public class Sha256Hash implements Serializable, Comparable<Sha256Hash> {
      * Calculates the SHA-256 hash of the given byte range,
      * and then hashes the resulting hash again.
      *
-     * @param input the array containing the bytes to hash
+     * @param input  the array containing the bytes to hash
      * @param offset the offset within the array of the bytes to hash
      * @param length the number of bytes to hash
      * @return the double-hash (in big-endian order)
@@ -227,7 +231,7 @@ public class Sha256Hash implements Serializable, Comparable<Sha256Hash> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        return Arrays.equals(bytes, ((Sha256Hash)o).bytes);
+        return Arrays.equals(bytes, ((Sha256Hash) o).bytes);
     }
 
     /**

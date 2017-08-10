@@ -32,7 +32,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * feeds you invalid transactions, eg, ones that spend coins which don't exist. If you don't see most of the peers
  * announce the transaction within a reasonable time, it may be that the TX is not valid. Alternatively, an attacker
  * may control your entire internet connection: in this scenario counting broadcasting peers does not help you.</p>
- *
+ * <p>
  * <p>It is <b>not</b> at this time directly equivalent to the Bitcoin Core memory pool, which tracks
  * all transactions not currently included in the best chain - it's simply a cache.</p>
  */
@@ -41,11 +41,13 @@ public class TxConfidenceTable {
 
     private static class WeakConfidenceReference extends WeakReference<TransactionConfidence> {
         public Sha256Hash hash;
+
         public WeakConfidenceReference(TransactionConfidence confidence, ReferenceQueue<TransactionConfidence> queue) {
             super(confidence, queue);
             hash = confidence.getTransactionHash();
         }
     }
+
     private LinkedHashMap<Sha256Hash, WeakConfidenceReference> table;
 
     // This ReferenceQueue gets entries added to it when they are only weakly reachable, ie, the TxConfidenceTable is the
@@ -55,12 +57,15 @@ public class TxConfidenceTable {
     // if our peers flood us with invs but the MAX_SIZE param caps this.
     private ReferenceQueue<TransactionConfidence> referenceQueue;
 
-    /** The max size of a table created with the no-args constructor. */
+    /**
+     * The max size of a table created with the no-args constructor.
+     */
     public static final int MAX_SIZE = 1000;
 
     /**
      * Creates a table that will track at most the given number of transactions (allowing you to bound memory
      * usage).
+     *
      * @param size Max number of transactions to track. The table will fill up to this size then stop growing.
      */
     public TxConfidenceTable(final int size) {

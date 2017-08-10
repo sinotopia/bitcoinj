@@ -124,8 +124,7 @@ public final class Coin implements Monetary, Comparable<Coin>, Serializable {
      * "1.23E3", "1234.5E-5".
      * </p>
      *
-     * @throws IllegalArgumentException
-     *             if you try to specify fractional satoshis, or a value out of range.
+     * @throws IllegalArgumentException if you try to specify fractional satoshis, or a value out of range.
      */
     public static Coin parseCoin(final String str) {
         try {
@@ -145,8 +144,7 @@ public final class Coin implements Monetary, Comparable<Coin>, Serializable {
      * "1.23E3", "1234.5E-5".
      * <p/>
      *
-     * @throws IllegalArgumentException
-     *             if you try to specify a value out of range.
+     * @throws IllegalArgumentException if you try to specify a value out of range.
      */
     public static Coin parseCoinInexact(final String str) {
         try {
@@ -161,7 +159,9 @@ public final class Coin implements Monetary, Comparable<Coin>, Serializable {
         return new Coin(LongMath.checkedAdd(this.value, value.value));
     }
 
-    /** Alias for add */
+    /**
+     * Alias for add
+     */
     public Coin plus(final Coin value) {
         return add(value);
     }
@@ -170,7 +170,9 @@ public final class Coin implements Monetary, Comparable<Coin>, Serializable {
         return new Coin(LongMath.checkedSubtract(this.value, value.value));
     }
 
-    /** Alias for subtract */
+    /**
+     * Alias for subtract
+     */
     public Coin minus(final Coin value) {
         return subtract(value);
     }
@@ -179,12 +181,16 @@ public final class Coin implements Monetary, Comparable<Coin>, Serializable {
         return new Coin(LongMath.checkedMultiply(this.value, factor));
     }
 
-    /** Alias for multiply */
+    /**
+     * Alias for multiply
+     */
     public Coin times(final long factor) {
         return multiply(factor);
     }
 
-    /** Alias for multiply */
+    /**
+     * Alias for multiply
+     */
     public Coin times(final int factor) {
         return multiply(factor);
     }
@@ -193,18 +199,22 @@ public final class Coin implements Monetary, Comparable<Coin>, Serializable {
         return new Coin(this.value / divisor);
     }
 
-    /** Alias for divide */
+    /**
+     * Alias for divide
+     */
     public Coin div(final long divisor) {
         return divide(divisor);
     }
 
-    /** Alias for divide */
+    /**
+     * Alias for divide
+     */
     public Coin div(final int divisor) {
         return divide(divisor);
     }
 
     public Coin[] divideAndRemainder(final long divisor) {
-        return new Coin[] { new Coin(this.value / divisor), new Coin(this.value % divisor) };
+        return new Coin[]{new Coin(this.value / divisor), new Coin(this.value % divisor)};
     }
 
     public long divide(final Coin divisor) {
@@ -310,7 +320,7 @@ public final class Coin implements Monetary, Comparable<Coin>, Serializable {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        return this.value == ((Coin)o).value;
+        return this.value == ((Coin) o).value;
     }
 
     @Override

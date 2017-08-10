@@ -23,7 +23,7 @@ import java.util.List;
  * message a Bitcoin node returns matching blocks up to the limit, but without the bodies. It is useful as an
  * optimization: when your wallet does not contain any keys created before a particular time, you don't have to download
  * the bodies for those blocks because you know there are no relevant transactions.</p>
- * 
+ * <p>
  * <p>Instances of this class are not safe for use by multiple threads.</p>
  */
 public class GetHeadersMessage extends GetBlocksMessage {
@@ -50,12 +50,12 @@ public class GetHeadersMessage extends GetBlocksMessage {
         if (o == null || getClass() != o.getClass()) return false;
         GetHeadersMessage other = (GetHeadersMessage) o;
         return version == other.version && stopHash.equals(other.stopHash) &&
-            locator.size() == other.locator.size() && locator.containsAll(other.locator);  // ignores locator ordering
+                locator.size() == other.locator.size() && locator.containsAll(other.locator);  // ignores locator ordering
     }
 
     @Override
     public int hashCode() {
-        int hashCode = (int)version ^ "getheaders".hashCode() ^ stopHash.hashCode();
+        int hashCode = (int) version ^ "getheaders".hashCode() ^ stopHash.hashCode();
         for (Sha256Hash aLocator : locator) hashCode ^= aLocator.hashCode(); // ignores locator ordering
         return hashCode;
     }

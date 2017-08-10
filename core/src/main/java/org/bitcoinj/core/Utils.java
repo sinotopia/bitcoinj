@@ -50,7 +50,9 @@ import static com.google.common.util.concurrent.Uninterruptibles.sleepUninterrup
  */
 public class Utils {
 
-    /** The string that prefixes all text messages signed using Bitcoin keys. */
+    /**
+     * The string that prefixes all text messages signed using Bitcoin keys.
+     */
     public static final String BITCOIN_SIGNED_MESSAGE_HEADER = "Bitcoin Signed Message:\n";
     public static final byte[] BITCOIN_SIGNED_MESSAGE_HEADER_BYTES = BITCOIN_SIGNED_MESSAGE_HEADER.getBytes(Charsets.UTF_8);
 
@@ -60,7 +62,7 @@ public class Utils {
 
     /**
      * <p>
-     * The regular {@link java.math.BigInteger#toByteArray()} includes the sign bit of the number and 
+     * The regular {@link java.math.BigInteger#toByteArray()} includes the sign bit of the number and
      * might result in an extra byte addition. This method removes this extra byte.
      * </p>
      * <p>
@@ -71,7 +73,8 @@ public class Utils {
      * Otherwise the representation is not minimal.
      * For example, if the sign bit is 0000_00<b>0</b>0, then the representation is not minimal due to the rightmost zero.
      * </p>
-     * @param b the integer to format into a byte array
+     *
+     * @param b        the integer to format into a byte array
      * @param numBytes the desired size of the resulting byte array
      * @return numBytes byte long array.
      */
@@ -120,7 +123,7 @@ public class Utils {
         stream.write((int) (0xFF & (val >> 16)));
         stream.write((int) (0xFF & (val >> 24)));
     }
-    
+
     public static void int64ToByteStreamLE(long val, OutputStream stream) throws IOException {
         stream.write((int) (0xFF & val));
         stream.write((int) (0xFF & (val >> 8)));
@@ -175,21 +178,21 @@ public class Utils {
             buf[i] = bytes[bytes.length - 1 - i];
         return buf;
     }
-    
+
     /**
      * Returns a copy of the given byte array with the bytes of each double-word (4 bytes) reversed.
-     * 
-     * @param bytes length must be divisible by 4.
+     *
+     * @param bytes      length must be divisible by 4.
      * @param trimLength trim output to this length.  If positive, must be divisible by 4.
      */
     public static byte[] reverseDwordBytes(byte[] bytes, int trimLength) {
         checkArgument(bytes.length % 4 == 0);
         checkArgument(trimLength < 0 || trimLength % 4 == 0);
-        
+
         byte[] rev = new byte[trimLength >= 0 && bytes.length > trimLength ? trimLength : bytes.length];
-        
+
         for (int i = 0; i < rev.length; i += 4) {
-            System.arraycopy(bytes, i, rev, i , 4);
+            System.arraycopy(bytes, i, rev, i, 4);
             for (int j = 0; j < 4; j++) {
                 rev[i + j] = bytes[i + 3 - j];
             }
@@ -197,7 +200,9 @@ public class Utils {
         return rev;
     }
 
-    /** Parse 4 bytes from the byte array (starting at the offset) as unsigned 32-bit integer in little endian format. */
+    /**
+     * Parse 4 bytes from the byte array (starting at the offset) as unsigned 32-bit integer in little endian format.
+     */
     public static long readUint32(byte[] bytes, int offset) {
         return (bytes[offset] & 0xffl) |
                 ((bytes[offset + 1] & 0xffl) << 8) |
@@ -205,19 +210,23 @@ public class Utils {
                 ((bytes[offset + 3] & 0xffl) << 24);
     }
 
-    /** Parse 8 bytes from the byte array (starting at the offset) as signed 64-bit integer in little endian format. */
+    /**
+     * Parse 8 bytes from the byte array (starting at the offset) as signed 64-bit integer in little endian format.
+     */
     public static long readInt64(byte[] bytes, int offset) {
         return (bytes[offset] & 0xffl) |
-               ((bytes[offset + 1] & 0xffl) << 8) |
-               ((bytes[offset + 2] & 0xffl) << 16) |
-               ((bytes[offset + 3] & 0xffl) << 24) |
-               ((bytes[offset + 4] & 0xffl) << 32) |
-               ((bytes[offset + 5] & 0xffl) << 40) |
-               ((bytes[offset + 6] & 0xffl) << 48) |
-               ((bytes[offset + 7] & 0xffl) << 56);
+                ((bytes[offset + 1] & 0xffl) << 8) |
+                ((bytes[offset + 2] & 0xffl) << 16) |
+                ((bytes[offset + 3] & 0xffl) << 24) |
+                ((bytes[offset + 4] & 0xffl) << 32) |
+                ((bytes[offset + 5] & 0xffl) << 40) |
+                ((bytes[offset + 6] & 0xffl) << 48) |
+                ((bytes[offset + 7] & 0xffl) << 56);
     }
 
-    /** Parse 4 bytes from the byte array (starting at the offset) as unsigned 32-bit integer in big endian format. */
+    /**
+     * Parse 4 bytes from the byte array (starting at the offset) as unsigned 32-bit integer in big endian format.
+     */
     public static long readUint32BE(byte[] bytes, int offset) {
         return ((bytes[offset] & 0xffl) << 24) |
                 ((bytes[offset + 1] & 0xffl) << 16) |
@@ -225,7 +234,9 @@ public class Utils {
                 (bytes[offset + 3] & 0xffl);
     }
 
-    /** Parse 2 bytes from the byte array (starting at the offset) as unsigned 16-bit integer in big endian format. */
+    /**
+     * Parse 2 bytes from the byte array (starting at the offset) as unsigned 16-bit integer in big endian format.
+     */
     public static int readUint16BE(byte[] bytes, int offset) {
         return ((bytes[offset] & 0xff) << 8) |
                 (bytes[offset + 1] & 0xff);
@@ -247,6 +258,7 @@ public class Utils {
      * MPI encoded numbers are produced by the OpenSSL BN_bn2mpi function. They consist of
      * a 4 byte big endian length field, followed by the stated number of bytes representing
      * the number in big endian format (with a sign bit).
+     *
      * @param hasLength can be set to false if the given array is missing the 4 byte length field
      */
     public static BigInteger decodeMPI(byte[] mpi, boolean hasLength) {
@@ -265,19 +277,20 @@ public class Utils {
         BigInteger result = new BigInteger(buf);
         return isNegative ? result.negate() : result;
     }
-    
+
     /**
      * MPI encoded numbers are produced by the OpenSSL BN_bn2mpi function. They consist of
      * a 4 byte big endian length field, followed by the stated number of bytes representing
      * the number in big endian format (with a sign bit).
+     *
      * @param includeLength indicates whether the 4 byte length field should be included
      */
     public static byte[] encodeMPI(BigInteger value, boolean includeLength) {
         if (value.equals(BigInteger.ZERO)) {
             if (!includeLength)
-                return new byte[] {};
+                return new byte[]{};
             else
-                return new byte[] {0x00, 0x00, 0x00, 0x00};
+                return new byte[]{0x00, 0x00, 0x00, 0x00};
         }
         boolean isNegative = value.signum() < 0;
         if (isNegative)
@@ -298,7 +311,7 @@ public class Utils {
             if (length != array.length) {
                 result = new byte[length];
                 System.arraycopy(array, 0, result, 1, array.length);
-            }else
+            } else
                 result = array;
             if (isNegative)
                 result[0] |= 0x80;
@@ -311,11 +324,11 @@ public class Utils {
      * floating point format. The most significant 8 bits are the unsigned exponent of base 256. This exponent can
      * be thought of as "number of bytes of N". The lower 23 bits are the mantissa. Bit number 24 (0x800000) represents
      * the sign of N. Therefore, N = (-1^sign) * mantissa * 256^(exponent-3).</p>
-     *
+     * <p>
      * <p>Satoshi's original implementation used BN_bn2mpi() and BN_mpi2bn(). MPI uses the most significant bit of the
      * first byte as sign. Thus 0x1234560000 is compact 0x05123456 and 0xc0de000000 is compact 0x0600c0de. Compact
      * 0x05c0de00 would be -0x40de000000.</p>
-     *
+     * <p>
      * <p>Bitcoin only uses this "compact" format for encoding difficulty targets, which are unsigned 256bit quantities.
      * Thus, all the complexities of the sign bit and using base 256 are probably an implementation accident.</p>
      */
@@ -394,7 +407,10 @@ public class Utils {
     }
 
     // TODO: Replace usages of this where the result is / 1000 with currentTimeSeconds.
-    /** Returns the current time in milliseconds since the epoch, or a mocked out equivalent. */
+
+    /**
+     * Returns the current time in milliseconds since the epoch, or a mocked out equivalent.
+     */
     public static long currentTimeMillis() {
         return mockTime != null ? mockTime.getTime() : System.currentTimeMillis();
     }
@@ -407,6 +423,7 @@ public class Utils {
 
     /**
      * Formats a given date+time value to an ISO 8601 string.
+     *
      * @param dateTime value to format, as a Date
      */
     public static String dateTimeFormat(Date dateTime) {
@@ -417,6 +434,7 @@ public class Utils {
 
     /**
      * Formats a given date+time value to an ISO 8601 string.
+     *
      * @param dateTime value to format, unix time (ms)
      */
     public static String dateTimeFormat(long dateTime) {
@@ -447,7 +465,7 @@ public class Utils {
      * The exception can never occur given the charsets
      * US-ASCII, ISO-8859-1, UTF-8, UTF-16, UTF-16LE or UTF-16BE.
      *
-     * @param bytes the bytes to be decoded into characters
+     * @param bytes       the bytes to be decoded into characters
      * @param charsetName the name of a supported {@linkplain java.nio.charset.Charset charset}
      * @return the decoded String
      */
@@ -466,7 +484,7 @@ public class Utils {
      * The exception can never occur given the charsets
      * US-ASCII, ISO-8859-1, UTF-8, UTF-16, UTF-16LE or UTF-16BE.
      *
-     * @param str the string to encode into bytes
+     * @param str         the string to encode into bytes
      * @param charsetName the name of a supported {@linkplain java.nio.charset.Charset charset}
      * @return the encoded bytes
      */
@@ -501,7 +519,7 @@ public class Utils {
 
     /**
      * <p>Given a textual message, returns a byte buffer formatted as follows:</p>
-     *
+     * <p>
      * <tt><p>[24] "Bitcoin Signed Message:\n" [message.length as a varint] message</p></tt>
      */
     public static byte[] formatMessageForSigning(String message) {
@@ -518,21 +536,27 @@ public class Utils {
             throw new RuntimeException(e);  // Cannot happen.
         }
     }
-    
+
     // 00000001, 00000010, 00000100, 00001000, ...
     private static final int[] bitMask = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
-    
-    /** Checks if the given bit is set in data, using little endian (not the same as Java native big endian) */
+
+    /**
+     * Checks if the given bit is set in data, using little endian (not the same as Java native big endian)
+     */
     public static boolean checkBitLE(byte[] data, int index) {
         return (data[index >>> 3] & bitMask[7 & index]) != 0;
     }
-    
-    /** Sets the given bit in data to one, using little endian (not the same as Java native big endian) */
+
+    /**
+     * Sets the given bit in data to one, using little endian (not the same as Java native big endian)
+     */
     public static void setBitLE(byte[] data, int index) {
         data[index >>> 3] |= bitMask[7 & index];
     }
 
-    /** Sleep for a span of time, or mock sleep if enabled */
+    /**
+     * Sleep for a span of time, or mock sleep if enabled
+     */
     public static void sleep(long millis) {
         if (mockSleepQueue == null) {
             sleepUninterruptibly(millis, TimeUnit.MILLISECONDS);
@@ -548,7 +572,9 @@ public class Utils {
         }
     }
 
-    /** Enable or disable mock sleep.  If enabled, set mock time to current time. */
+    /**
+     * Enable or disable mock sleep.  If enabled, set mock time to current time.
+     */
     public static void setMockSleep(boolean isEnable) {
         if (isEnable) {
             mockSleepQueue = new ArrayBlockingQueue<>(1);
@@ -558,12 +584,16 @@ public class Utils {
         }
     }
 
-    /** Let sleeping thread pass the synchronization point.  */
+    /**
+     * Let sleeping thread pass the synchronization point.
+     */
     public static void passMockSleep() {
         mockSleepQueue.offer(false);
     }
 
-    /** Let the sleeping thread pass the synchronization point any number of times. */
+    /**
+     * Let the sleeping thread pass the synchronization point any number of times.
+     */
     public static void finishMockSleep() {
         if (mockSleepQueue != null) {
             mockSleepQueue.offer(true);
@@ -571,6 +601,7 @@ public class Utils {
     }
 
     private static int isAndroid = -1;
+
     public static boolean isAndroidRuntime() {
         if (isAndroid == -1) {
             final String runtime = System.getProperty("java.runtime.name");
@@ -581,9 +612,17 @@ public class Utils {
 
     private static class Pair implements Comparable<Pair> {
         int item, count;
-        public Pair(int item, int count) { this.count = count; this.item = item; }
+
+        public Pair(int item, int count) {
+            this.count = count;
+            this.item = item;
+        }
+
         // note that in this implementation compareTo() is not consistent with equals()
-        @Override public int compareTo(Pair o) { return -Ints.compare(count, o.count); }
+        @Override
+        public int compareTo(Pair o) {
+            return -Ints.compare(count, o.count);
+        }
     }
 
     public static int maxOfMostFreq(int... items) {

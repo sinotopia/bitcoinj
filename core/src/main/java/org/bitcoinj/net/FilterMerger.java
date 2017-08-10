@@ -29,7 +29,7 @@ import java.util.LinkedList;
  * <p>A reusable object that will calculate, given a list of {@link org.bitcoinj.core.PeerFilterProvider}s, a merged
  * {@link org.bitcoinj.core.BloomFilter} and earliest key time for all of them.
  * Used by the {@link org.bitcoinj.core.PeerGroup} class internally.</p>
- *
+ * <p>
  * <p>Thread safety: threading here can be complicated. Each filter provider is given a begin event, which may acquire
  * a lock (and is guaranteed to receive an end event). This class is mostly thread unsafe and is meant to be used from a
  * single thread only, PeerGroup ensures this by only accessing it from the dedicated PeerGroup thread. PeerGroup does

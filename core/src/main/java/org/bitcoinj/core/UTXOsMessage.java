@@ -17,6 +17,7 @@
 package org.bitcoinj.core;
 
 import com.google.common.base.Objects;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ import java.util.List;
  * supported by Bitcoin Core. An implementation is available in <a href="https://github.com/bitcoinxt/bitcoinxt">Bitcoin XT</a>,
  * a patch set on top of Core. Thus if you want to use it, you must find some XT peers to connect to. This can be done
  * using a {@link org.bitcoinj.net.discovery.HttpDiscovery} class combined with an HTTP/Cartographer seed.</p>
- *
+ * <p>
  * <p>The getutxos/utxos protocol is defined in <a href="https://github.com/bitcoin/bips/blob/master/bip-0065.mediawiki">BIP 65</a>.
  * In that document you can find a discussion of the security of this protocol (briefly, there is none). Because the
  * data found in this message is not authenticated it should be used carefully. Places where it can be useful are if
@@ -38,7 +39,7 @@ import java.util.List;
  * if the data is occasionally wrong. Bear in mind that the answer can be wrong even in the absence of malicious intent
  * just through the nature of querying an ever changing data source: the UTXO set may be updated by a new transaction
  * immediately after this message is returned.</p>
- * 
+ * <p>
  * <p>Instances of this class are not safe for use by multiple threads.</p>
  */
 public class UTXOsMessage extends Message {
@@ -49,7 +50,9 @@ public class UTXOsMessage extends Message {
     private List<TransactionOutput> outputs;
     private long[] heights;
 
-    /** This is a special sentinel value that can appear in the heights field if the given tx is in the mempool. */
+    /**
+     * This is a special sentinel value that can appear in the heights field if the given tx is in the mempool.
+     */
     public static long MEMPOOL_HEIGHT = 0x7FFFFFFFL;
 
     public UTXOsMessage(NetworkParameters params, byte[] payloadBytes) {
@@ -133,13 +136,19 @@ public class UTXOsMessage extends Message {
         return Arrays.copyOf(hits, hits.length);
     }
 
-    /** Returns the list of outputs that matched the query. */
+    /**
+     * Returns the list of outputs that matched the query.
+     */
     public List<TransactionOutput> getOutputs() {
         return new ArrayList<>(outputs);
     }
 
-    /** Returns the block heights of each output returned in getOutputs(), or MEMPOOL_HEIGHT if not confirmed yet. */
-    public long[] getHeights() { return Arrays.copyOf(heights, heights.length); }
+    /**
+     * Returns the block heights of each output returned in getOutputs(), or MEMPOOL_HEIGHT if not confirmed yet.
+     */
+    public long[] getHeights() {
+        return Arrays.copyOf(heights, heights.length);
+    }
 
     @Override
     public String toString() {
@@ -158,8 +167,8 @@ public class UTXOsMessage extends Message {
         if (o == null || getClass() != o.getClass()) return false;
         UTXOsMessage other = (UTXOsMessage) o;
         return height == other.height && chainHead.equals(other.chainHead)
-            && Arrays.equals(heights, other.heights) && Arrays.equals(hits, other.hits)
-            && outputs.equals(other.outputs);
+                && Arrays.equals(heights, other.heights) && Arrays.equals(hits, other.hits)
+                && outputs.equals(other.outputs);
     }
 
     @Override

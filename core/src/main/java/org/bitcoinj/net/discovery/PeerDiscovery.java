@@ -31,10 +31,13 @@ public interface PeerDiscovery {
 
     /**
      * Returns an array of addresses. This method may block.
+     *
      * @param services Required services as a bitmask, e.g. {@link VersionMessage#NODE_NETWORK}.
      */
     InetSocketAddress[] getPeers(long services, long timeoutValue, TimeUnit timeoutUnit) throws PeerDiscoveryException;
 
-    /** Stops any discovery in progress when we want to shut down quickly. */
+    /**
+     * Stops any discovery in progress when we want to shut down quickly.
+     */
     void shutdown();
 }

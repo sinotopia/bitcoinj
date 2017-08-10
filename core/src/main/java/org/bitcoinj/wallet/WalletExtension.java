@@ -23,11 +23,13 @@ package org.bitcoinj.wallet;
  * should use a Java-style reverse DNS identifier to avoid being mixed up with other kinds of extension. To use an
  * extension, add an object that implements this interface to the wallet using {@link Wallet#addExtension(WalletExtension)}
  * before you load it (to read existing data) and ensure it's present when the wallet is save (to write the data).</p>
- *
+ * <p>
  * <p>Note that extensions are singletons - you cannot add two objects that provide the same ID to the same wallet.</p>
  */
 public interface WalletExtension {
-    /** Returns a Java package/class style name used to disambiguate this extension from others. */
+    /**
+     * Returns a Java package/class style name used to disambiguate this extension from others.
+     */
     String getWalletExtensionID();
 
     /**
@@ -37,8 +39,13 @@ public interface WalletExtension {
      */
     boolean isWalletExtensionMandatory();
 
-    /** Returns bytes that will be saved in the wallet. */
+    /**
+     * Returns bytes that will be saved in the wallet.
+     */
     byte[] serializeWalletExtension();
-    /** Loads the contents of this object from the wallet. */
+
+    /**
+     * Loads the contents of this object from the wallet.
+     */
     void deserializeWalletExtension(Wallet containingWallet, byte[] data) throws Exception;
 }

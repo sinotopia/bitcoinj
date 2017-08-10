@@ -31,12 +31,13 @@ import static com.google.common.base.Preconditions.*;
 
 /**
  * <p>Creates a simple connection to a server using a {@link StreamConnection} to process data.</p>
- *
+ * <p>
  * <p>Generally, using {@link NioClient} and {@link NioClientManager} should be preferred over {@link BlockingClient}
  * and {@link BlockingClientManager}, unless you wish to connect over a proxy or use some other network settings that
  * cannot be set using NIO.</p>
  */
 public class BlockingClient implements MessageWriteTarget {
+
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(BlockingClient.class);
 
     private static final int BUFFER_SIZE_LOWER_BOUND = 4096;
@@ -54,9 +55,9 @@ public class BlockingClient implements MessageWriteTarget {
      *
      * @param connectTimeoutMillis The connect timeout set on the connection (in milliseconds). 0 is interpreted as no
      *                             timeout.
-     * @param socketFactory An object that creates {@link Socket} objects on demand, which may be customised to control
-     *                      how this client connects to the internet. If not sure, use SocketFactory.getDefault()
-     * @param clientSet A set which this object will add itself to after initialization, and then remove itself from
+     * @param socketFactory        An object that creates {@link Socket} objects on demand, which may be customised to control
+     *                             how this client connects to the internet. If not sure, use SocketFactory.getDefault()
+     * @param clientSet            A set which this object will add itself to after initialization, and then remove itself from
      */
     public BlockingClient(final SocketAddress serverAddress, final StreamConnection connection,
                           final int connectTimeoutMillis, final SocketFactory socketFactory,
@@ -155,7 +156,9 @@ public class BlockingClient implements MessageWriteTarget {
         }
     }
 
-    /** Returns a future that completes once connection has occurred at the socket level or with an exception if failed to connect. */
+    /**
+     * Returns a future that completes once connection has occurred at the socket level or with an exception if failed to connect.
+     */
     public ListenableFuture<SocketAddress> getConnectFuture() {
         return connectFuture;
     }

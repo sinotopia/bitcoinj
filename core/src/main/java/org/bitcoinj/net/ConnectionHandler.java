@@ -54,14 +54,21 @@ class ConnectionHandler implements MessageWriteTarget {
     // We lock when touching local flags and when writing data, but NEVER when calling any methods which leave this
     // class into non-Java classes.
     private final ReentrantLock lock = Threading.lock("nioConnectionHandler");
-    @GuardedBy("lock") private final ByteBuffer readBuff;
-    @GuardedBy("lock") private final SocketChannel channel;
-    @GuardedBy("lock") private final SelectionKey key;
-    @GuardedBy("lock") StreamConnection connection;
-    @GuardedBy("lock") private boolean closeCalled = false;
+    @GuardedBy("lock")
+    private final ByteBuffer readBuff;
+    @GuardedBy("lock")
+    private final SocketChannel channel;
+    @GuardedBy("lock")
+    private final SelectionKey key;
+    @GuardedBy("lock")
+    StreamConnection connection;
+    @GuardedBy("lock")
+    private boolean closeCalled = false;
 
-    @GuardedBy("lock") private long bytesToWriteRemaining = 0;
-    @GuardedBy("lock") private final LinkedList<ByteBuffer> bytesToWrite = new LinkedList<>();
+    @GuardedBy("lock")
+    private long bytesToWriteRemaining = 0;
+    @GuardedBy("lock")
+    private final LinkedList<ByteBuffer> bytesToWrite = new LinkedList<>();
 
     private Set<ConnectionHandler> connectedHandlers;
 
@@ -73,7 +80,7 @@ class ConnectionHandler implements MessageWriteTarget {
 
     private ConnectionHandler(@Nullable StreamConnection connection, SelectionKey key) {
         this.key = key;
-        this.channel = checkNotNull(((SocketChannel)key.channel()));
+        this.channel = checkNotNull(((SocketChannel) key.channel()));
         if (connection == null) {
             readBuff = null;
             return;
@@ -199,7 +206,7 @@ class ConnectionHandler implements MessageWriteTarget {
     // Runs unlocked as the caller is single-threaded (or if not, should enforce that handleKey is only called
     // atomically for a given ConnectionHandler)
     public static void handleKey(SelectionKey key) {
-        ConnectionHandler handler = ((ConnectionHandler)key.attachment());
+        ConnectionHandler handler = ((ConnectionHandler) key.attachment());
         try {
             if (handler == null)
                 return;

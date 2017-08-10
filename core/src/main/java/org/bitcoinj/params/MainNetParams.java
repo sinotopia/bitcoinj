@@ -40,7 +40,7 @@ public class MainNetParams extends AbstractBitcoinNetParams {
         dumpedPrivateKeyHeader = 128;
         addressHeader = 0;
         p2shHeader = 5;
-        acceptableAddressCodes = new int[] { addressHeader, p2shHeader };
+        acceptableAddressCodes = new int[]{addressHeader, p2shHeader};
         port = 8333;
         packetMagic = 0xf9beb4d9L;
         bip32HeaderPub = 0x0488B21E; //The 4 byte header that serializes in base58 to "xpub".
@@ -70,7 +70,7 @@ public class MainNetParams extends AbstractBitcoinNetParams {
         checkpoints.put(91880, Sha256Hash.wrap("00000000000743f190a18c5577a3c2d2a1f610ae9601ac046a38084ccb7cd721"));
         checkpoints.put(200000, Sha256Hash.wrap("000000000000034a7dedef4a161fa058a2d67a173a90155f3a2fe6fc132e0ebf"));
 
-        dnsSeeds = new String[] {
+        dnsSeeds = new String[]{
                 "seed.bitcoin.sipa.be",         // Pieter Wuille
                 "dnsseed.bluematt.me",          // Matt Corallo
                 "dnsseed.bitcoin.dashjr.org",   // Luke Dashjr
@@ -80,7 +80,7 @@ public class MainNetParams extends AbstractBitcoinNetParams {
                 "seed.bitcoin.jonasschnelli.ch",// Jonas Schnelli
                 "bitcoin.bloqseeds.net",        // Bloq
         };
-        httpSeeds = new HttpDiscovery.Details[] {
+        httpSeeds = new HttpDiscovery.Details[]{
                 // Andreas Schildbach
                 new HttpDiscovery.Details(
                         ECKey.fromPublicOnly(Utils.HEX.decode("0238746c59d46d5408bf8b1d0af5740fe1a6e1703fcb56b2953f0b965c740d256f")),
@@ -88,7 +88,7 @@ public class MainNetParams extends AbstractBitcoinNetParams {
                 )
         };
 
-        addrSeeds = new int[] {
+        addrSeeds = new int[]{
                 0x1ddb1032, 0x6242ce40, 0x52d6a445, 0x2dd7a445, 0x8a53cd47, 0x73263750, 0xda23c257, 0xecd4ed57,
                 0x0a40ec59, 0x75dce160, 0x7df76791, 0x89370bad, 0xa4f214ad, 0x767700ae, 0x638b0418, 0x868a1018,
                 0xcd9f332e, 0x0129653e, 0xcc92dc3e, 0x96671640, 0x56487e40, 0x5b66f440, 0xb1d01f41, 0xf1dc6041,
@@ -133,6 +133,7 @@ public class MainNetParams extends AbstractBitcoinNetParams {
     }
 
     private static MainNetParams instance;
+
     public static synchronized MainNetParams get() {
         if (instance == null) {
             instance = new MainNetParams();

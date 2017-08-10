@@ -51,11 +51,11 @@ public class SendRequest {
      * <p>A transaction, probably incomplete, that describes the outline of what you want to do. This typically will
      * mean it has some outputs to the intended destinations, but no inputs or change address (and therefore no
      * fees) - the wallet will calculate all that for you and update tx later.</p>
-     *
+     * <p>
      * <p>Be careful when adding outputs that you check the min output value
      * ({@link TransactionOutput#getMinNonDustValue(Coin)}) to avoid the whole transaction being rejected
      * because one output is dust.</p>
-     *
+     * <p>
      * <p>If there are already inputs to the transaction, make sure their out point has a connected output,
      * otherwise their value will be added to fee.  Also ensure they are either signed or are spendable by a wallet
      * key, otherwise the behavior of {@link Wallet#completeTx(SendRequest)} is undefined (likely
@@ -83,7 +83,7 @@ public class SendRequest {
      * is how mining is incentivized in later years of the Bitcoin system when inflation drops. It also provides
      * a way for people to prioritize their transactions over others and is used as a way to make denial of service
      * attacks expensive.</p>
-     *
+     * <p>
      * <p>This is a dynamic fee (in satoshis) which will be added to the transaction for each kilobyte in size
      * including the first. This is useful as as miners usually sort pending transactions by their fee per unit size
      * when choosing which transactions to add to a block. Note that, to keep this equivalent to Bitcoin Core
@@ -95,7 +95,7 @@ public class SendRequest {
      * <p>Requires that there be enough fee for a default Bitcoin Core to at least relay the transaction.
      * (ie ensure the transaction will not be outright rejected by the network). Defaults to true, you should
      * only set this to false if you know what you're doing.</p>
-     *
+     * <p>
      * <p>Note that this does not enforce certain fee rules that only apply to transactions which are larger than
      * 26,000 bytes. If you get a transaction which is that large, you should set a feePerKb of at least
      * {@link Transaction#REFERENCE_DEFAULT_MIN_TX_FEE}.</p>
@@ -131,6 +131,7 @@ public class SendRequest {
     /**
      * Specifies what to do with missing signatures left after completing this request. Default strategy is to
      * throw an exception on missing signature ({@link MissingSigsMode#THROW}).
+     *
      * @see MissingSigsMode
      */
     public MissingSigsMode missingSigsMode = MissingSigsMode.THROW;
@@ -155,11 +156,12 @@ public class SendRequest {
     // Tracks if this has been passed to wallet.completeTx already: just a safety check.
     boolean completed;
 
-    private SendRequest() {}
+    private SendRequest() {
+    }
 
     /**
      * <p>Creates a new SendRequest to the given address for the given value.</p>
-     *
+     * <p>
      * <p>Be very careful when value is smaller than {@link Transaction#MIN_NONDUST_OUTPUT} as the transaction will
      * likely be rejected by the network in this case.</p>
      */
@@ -174,7 +176,7 @@ public class SendRequest {
 
     /**
      * <p>Creates a new SendRequest to the given pubkey for the given value.</p>
-     *
+     * <p>
      * <p>Be careful to check the output's value is reasonable using
      * {@link TransactionOutput#getMinNonDustValue(Coin)} afterwards or you risk having the transaction
      * rejected by the network. Note that using {@link SendRequest#to(Address, Coin)} will result
@@ -187,7 +189,9 @@ public class SendRequest {
         return req;
     }
 
-    /** Simply wraps a pre-built incomplete transaction provided by you. */
+    /**
+     * Simply wraps a pre-built incomplete transaction provided by you.
+     */
     public static SendRequest forTx(Transaction tx) {
         SendRequest req = new SendRequest();
         req.tx = tx;
@@ -249,7 +253,9 @@ public class SendRequest {
         return req;
     }
 
-    /** Copy data from payment request. */
+    /**
+     * Copy data from payment request.
+     */
     public SendRequest fromPaymentDetails(PaymentDetails paymentDetails) {
         if (paymentDetails.hasMemo())
             this.memo = paymentDetails.getMemo();

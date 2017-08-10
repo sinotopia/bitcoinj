@@ -37,10 +37,10 @@ import static com.google.common.base.Preconditions.checkState;
 /**
  * <p>A handler which is used in {@link NioServer} and {@link NioClient} to split up incoming data streams
  * into protobufs and provide an interface for writing protobufs to the connections.</p>
- *
+ * <p>
  * <p>Messages are encoded with a 4-byte signed integer (big endian) prefix to indicate their length followed by the
  * serialized protobuf</p>
- *
+ * <p>
  * <p>(Used to be called ProtobufParser)</p>
  */
 public class ProtobufConnection<MessageType extends MessageLite> extends AbstractTimeoutHandler implements StreamConnection {
@@ -48,15 +48,24 @@ public class ProtobufConnection<MessageType extends MessageLite> extends Abstrac
 
     /**
      * An interface which can be implemented to handle callbacks as new messages are generated and socket events occur.
+     *
      * @param <MessageType> The protobuf type which is used on this socket.
      *                      This <b>MUST</b> match the MessageType used in the parent {@link ProtobufConnection}
      */
     public interface Listener<MessageType extends MessageLite> {
-        /** Called when a new protobuf is received from the remote side. */
+        /**
+         * Called when a new protobuf is received from the remote side.
+         */
         void messageReceived(ProtobufConnection<MessageType> handler, MessageType msg);
-        /** Called when the connection is opened and available for writing data to. */
+
+        /**
+         * Called when the connection is opened and available for writing data to.
+         */
         void connectionOpen(ProtobufConnection<MessageType> handler);
-        /** Called when the connection is closed and no more data should be provided. */
+
+        /**
+         * Called when the connection is closed and no more data should be provided.
+         */
         void connectionClosed(ProtobufConnection<MessageType> handler);
     }
 
@@ -73,22 +82,25 @@ public class ProtobufConnection<MessageType extends MessageLite> extends Abstrac
     // a smaller network buffer per client and only allocate more memory when we need it to deserialize large messages.
     // Though this is not in of itself a DoS protection, it allows for handling more legitimate clients per server and
     // attacking clients can be made to timeout/get blocked if they are sending crap to fill buffers.
-    @GuardedBy("lock") private int messageBytesOffset = 0;
-    @GuardedBy("lock") private byte[] messageBytes;
+    @GuardedBy("lock")
+    private int messageBytesOffset = 0;
+    @GuardedBy("lock")
+    private byte[] messageBytes;
     private final ReentrantLock lock = Threading.lock("ProtobufConnection");
 
-    @VisibleForTesting final AtomicReference<MessageWriteTarget> writeTarget = new AtomicReference<>();
+    @VisibleForTesting
+    final AtomicReference<MessageWriteTarget> writeTarget = new AtomicReference<>();
 
     /**
      * Creates a new protobuf handler.
      *
-     * @param handler The callback listener
-     * @param prototype The default instance of the message type used in both directions of this channel.
-     *                  This should be the return value from {@link MessageLite#getDefaultInstanceForType()}
+     * @param handler        The callback listener
+     * @param prototype      The default instance of the message type used in both directions of this channel.
+     *                       This should be the return value from {@link MessageLite#getDefaultInstanceForType()}
      * @param maxMessageSize The maximum message size (not including the 4-byte length prefix).
      *                       Note that this has an upper bound of {@link Integer#MAX_VALUE} - 4
-     * @param timeoutMillis The timeout between messages before the connection is automatically closed. Only enabled
-     *                      after the connection is established.
+     * @param timeoutMillis  The timeout between messages before the connection is automatically closed. Only enabled
+     *                       after the connection is established.
      */
     public ProtobufConnection(Listener<MessageType> handler, MessageType prototype, int maxMessageSize, int timeoutMillis) {
         this.handler = handler;
@@ -213,7 +225,7 @@ public class ProtobufConnection<MessageType extends MessageLite> extends Abstrac
 
     /**
      * <p>Writes the given message to the other side of the connection, prefixing it with the proper 4-byte prefix.</p>
-     *
+     * <p>
      * <p>Provides a write-order guarantee.</p>
      *
      * @throws IllegalStateException If the encoded message is larger than the maximum message size.

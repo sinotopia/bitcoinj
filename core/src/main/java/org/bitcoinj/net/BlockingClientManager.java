@@ -31,7 +31,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * <p>A thin wrapper around a set of {@link BlockingClient}s.</p>
- *
+ * <p>
  * <p>Generally, using {@link NioClient} and {@link NioClientManager} should be preferred over {@link BlockingClient}
  * and {@link BlockingClientManager} as they scale significantly better, unless you wish to connect over a proxy or use
  * some other network settings that cannot be set using NIO.</p>
@@ -65,13 +65,16 @@ public class BlockingClientManager extends AbstractIdleService implements Client
         }
     }
 
-    /** Sets the number of milliseconds to wait before giving up on a connect attempt */
+    /**
+     * Sets the number of milliseconds to wait before giving up on a connect attempt
+     */
     public void setConnectTimeoutMillis(int connectTimeoutMillis) {
         this.connectTimeoutMillis = connectTimeoutMillis;
     }
 
     @Override
-    protected void startUp() throws Exception { }
+    protected void startUp() throws Exception {
+    }
 
     @Override
     protected void shutDown() throws Exception {

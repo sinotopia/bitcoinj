@@ -31,18 +31,20 @@ import java.util.List;
  * or a man in the middle could swap out its answer for something else. Please consult
  * <a href="https://github.com/bitcoin/bips/blob/master/bip-0065.mediawiki">BIP 65</a> for more information on this
  * message.</p>
- *
+ * <p>
  * <p>Note that this message does not let you query the UTXO set by address, script or any other criteria. The
  * reason is that Bitcoin nodes don't calculate the necessary database indexes to answer such queries, to save
  * space and time. If you want to look up unspent outputs by address, you can either query a block explorer site,
  * or you can use the {@link FullPrunedBlockChain} class to build the required indexes yourself. Bear in that it will
  * be quite slow and disk intensive to do that!</p>
- * 
+ * <p>
  * <p>Instances of this class are not safe for use by multiple threads.</p>
  */
 public class GetUTXOsMessage extends Message {
     public static final int MIN_PROTOCOL_VERSION = 70002;
-    /** Bitmask of service flags required for a node to support this command (0x3) */
+    /**
+     * Bitmask of service flags required for a node to support this command (0x3)
+     */
     public static final long SERVICE_FLAGS_REQUIRED = 3;
 
     private boolean includeMempool;

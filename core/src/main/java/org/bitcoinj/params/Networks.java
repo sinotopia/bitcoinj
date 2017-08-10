@@ -30,7 +30,9 @@ import java.util.Set;
  * version/type code.
  */
 public class Networks {
-    /** Registered networks */
+    /**
+     * Registered networks
+     */
     private static Set<? extends NetworkParameters> networks = ImmutableSet.of(TestNet3Params.get(), MainNetParams.get());
 
     public static Set<? extends NetworkParameters> get() {

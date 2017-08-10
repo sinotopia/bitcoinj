@@ -39,6 +39,7 @@ public class NioClient implements MessageWriteTarget {
         private MessageWriteTarget writeTarget;
         private boolean closeOnOpen = false;
         private boolean closeCalled = false;
+
         Handler(StreamConnection upstreamConnection, int connectTimeoutMillis) {
             this.upstreamConnection = upstreamConnection;
             setSocketTimeout(connectTimeoutMillis);

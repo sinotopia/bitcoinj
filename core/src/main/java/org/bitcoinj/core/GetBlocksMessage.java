@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * <p>Represents the "getblocks" P2P network message, which requests the hashes of the parts of the block chain we're
  * missing. Those blocks can then be downloaded with a {@link GetDataMessage}.</p>
- * 
+ * <p>
  * <p>Instances of this class are not safe for use by multiple threads.</p>
  */
 public class GetBlocksMessage extends Message {
@@ -95,12 +95,12 @@ public class GetBlocksMessage extends Message {
         if (o == null || getClass() != o.getClass()) return false;
         GetBlocksMessage other = (GetBlocksMessage) o;
         return version == other.version && stopHash.equals(other.stopHash) &&
-            locator.size() == other.locator.size() && locator.containsAll(other.locator); // ignores locator ordering
+                locator.size() == other.locator.size() && locator.containsAll(other.locator); // ignores locator ordering
     }
 
     @Override
     public int hashCode() {
-        int hashCode = (int)version ^ "getblocks".hashCode() ^ stopHash.hashCode();
+        int hashCode = (int) version ^ "getblocks".hashCode() ^ stopHash.hashCode();
         for (Sha256Hash aLocator : locator) hashCode ^= aLocator.hashCode(); // ignores locator ordering
         return hashCode;
     }

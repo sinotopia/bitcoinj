@@ -28,15 +28,18 @@ import java.util.Map;
  * things like exchange rates at the time a transaction was made would currently fall into this category. Of course,
  * it helps interop and other developers if you introduce a real type safe API for a new feature instead of using this
  * so please consider that path, if you find yourself tempted to store tags!</p>
- *
+ * <p>
  * <p>Good tag names won't conflict with other people's code, should you one day decide to merge them. Choose tag names
  * like "com.example:keyowner:02b7e6dc316dfaa19c5a599f63d88ffeae398759b857ca56b2f69de3e815381343" instead of
  * "owner" or just "o". Also, it's good practice to create constants for each string you use, to help avoid typos
  * in string parameters causing confusing bugs!</p>
  */
 public interface TaggableObject {
-    /** Returns the immutable byte array associated with the given tag name, or null if there is none. */
-    @Nullable ByteString maybeGetTag(String tag);
+    /**
+     * Returns the immutable byte array associated with the given tag name, or null if there is none.
+     */
+    @Nullable
+    ByteString maybeGetTag(String tag);
 
     /**
      * Returns the immutable byte array associated with the given tag name, or throws {@link java.lang.IllegalArgumentException}
@@ -44,9 +47,13 @@ public interface TaggableObject {
      */
     ByteString getTag(String tag);
 
-    /** Associates the given immutable byte array with the string tag. See the docs for TaggableObject to learn more. */
+    /**
+     * Associates the given immutable byte array with the string tag. See the docs for TaggableObject to learn more.
+     */
     void setTag(String tag, ByteString value);
 
-    /** Returns a copy of all the tags held by this object. */
+    /**
+     * Returns a copy of all the tags held by this object.
+     */
     Map<String, ByteString> getTags();
 }

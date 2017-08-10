@@ -29,25 +29,33 @@ import java.util.Locale;
 
 /**
  * <p>A VersionMessage holds information exchanged during connection setup with another peer. Most of the fields are not
- * particularly interesting. The subVer field, since BIP 14, acts as a User-Agent string would. You can and should 
+ * particularly interesting. The subVer field, since BIP 14, acts as a User-Agent string would. You can and should
  * append to or change the subVer for your own software so other implementations can identify it, and you can look at
  * the subVer field received from other nodes to see what they are running.</p>
- *
+ * <p>
  * <p>After creating yourself a VersionMessage, you can pass it to {@link PeerGroup#setVersionMessage(VersionMessage)}
  * to ensure it will be used for each new connection.</p>
- * 
+ * <p>
  * <p>Instances of this class are not safe for use by multiple threads.</p>
  */
 public class VersionMessage extends Message {
 
-    /** The version of this library release, as a string. */
+    /**
+     * The version of this library release, as a string.
+     */
     public static final String BITCOINJ_VERSION = "0.15-SNAPSHOT";
-    /** The value that is prepended to the subVer field of this application. */
+    /**
+     * The value that is prepended to the subVer field of this application.
+     */
     public static final String LIBRARY_SUBVER = "/bitcoinj:" + BITCOINJ_VERSION + "/";
 
-    /** A services flag that denotes whether the peer has a copy of the block chain or not. */
+    /**
+     * A services flag that denotes whether the peer has a copy of the block chain or not.
+     */
     public static final int NODE_NETWORK = 1;
-    /** A flag that denotes whether the peer supports the getutxos message or not. */
+    /**
+     * A flag that denotes whether the peer supports the getutxos message or not.
+     */
     public static final int NODE_GETUTXOS = 2;
 
     /**
@@ -92,7 +100,7 @@ public class VersionMessage extends Message {
     // It doesn't really make sense to ever lazily parse a version message or to retain the backing bytes.
     // If you're receiving this on the wire you need to check the protocol version and it will never need to be sent
     // back down the wire.
-    
+
     public VersionMessage(NetworkParameters params, int newBestHeight) {
         super(params);
         clientVersion = params.getProtocolVersionNum(NetworkParameters.ProtocolVersion.CURRENT);
@@ -204,7 +212,7 @@ public class VersionMessage extends Message {
     @Override
     public int hashCode() {
         return Objects.hashCode(bestHeight, clientVersion, localServices,
-            time, subVer, myAddr, theirAddr, relayTxesBeforeFilter);
+                time, subVer, myAddr, theirAddr, relayTxesBeforeFilter);
     }
 
     @Override
@@ -238,17 +246,17 @@ public class VersionMessage extends Message {
      * Appends the given user-agent information to the subVer field. The subVer is composed of a series of
      * name:version pairs separated by slashes in the form of a path. For example a typical subVer field for bitcoinj
      * users might look like "/bitcoinj:0.13/MultiBit:1.2/" where libraries come further to the left.<p>
-     *
+     * <p>
      * There can be as many components as you feel a need for, and the version string can be anything, but it is
      * recommended to use A.B.C where A = major, B = minor and C = revision for software releases, and dates for
      * auto-generated source repository snapshots. A valid subVer begins and ends with a slash, therefore name
      * and version are not allowed to contain such characters. <p>
-     *
+     * <p>
      * Anything put in the "comments" field will appear in brackets and may be used for platform info, or anything
      * else. For example, calling <tt>appendToSubVer("MultiBit", "1.0", "Windows")</tt> will result in a subVer being
      * set of "/bitcoinj:1.0/MultiBit:1.0(Windows)/". Therefore the / ( and ) characters are reserved in all these
      * components. If you don't want to add a comment (recommended), pass null.<p>
-     *
+     * <p>
      * See <a href="https://github.com/bitcoin/bips/blob/master/bip-0014.mediawiki">BIP 14</a> for more information.
      *
      * @param comments Optional (can be null) platform or other node specific information.
@@ -285,7 +293,9 @@ public class VersionMessage extends Message {
         return clientVersion >= params.getProtocolVersionNum(NetworkParameters.ProtocolVersion.BLOOM_FILTER);
     }
 
-    /** Returns true if the protocol version and service bits both indicate support for the getutxos message. */
+    /**
+     * Returns true if the protocol version and service bits both indicate support for the getutxos message.
+     */
     public boolean isGetUTXOsSupported() {
         return clientVersion >= GetUTXOsMessage.MIN_PROTOCOL_VERSION &&
                 (localServices & NODE_GETUTXOS) == NODE_GETUTXOS;

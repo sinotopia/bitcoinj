@@ -32,9 +32,9 @@ import static org.bitcoinj.core.Utils.*;
 /**
  * <p>Methods to serialize and de-serialize messages to the Bitcoin network format as defined in
  * <a href="https://en.bitcoin.it/wiki/Protocol_specification">the protocol specification</a>.</p>
- *
+ * <p>
  * <p>To be able to serialize and deserialize new Message subclasses the following criteria needs to be met.</p>
- *
+ * <p>
  * <ul>
  * <li>The proper Class instance needs to be mapped to its message name in the names variable below</li>
  * <li>There needs to be a constructor matching: NetworkParameters params, byte[] payload</li>
@@ -76,8 +76,8 @@ public class BitcoinSerializer extends MessageSerializer {
     /**
      * Constructs a BitcoinSerializer with the given behavior.
      *
-     * @param params           networkParams used to create Messages instances and termining packetMagic
-     * @param parseRetain      retain the backing byte array of a message for fast reserialization.
+     * @param params      networkParams used to create Messages instances and termining packetMagic
+     * @param parseRetain retain the backing byte array of a message for fast reserialization.
      */
     public BitcoinSerializer(NetworkParameters params, boolean parseRetain) {
         this.params = params;
@@ -191,7 +191,7 @@ public class BitcoinSerializer extends MessageSerializer {
         Message message;
         if (command.equals("version")) {
             return new VersionMessage(params, payloadBytes);
-        } else if (command.equals("inv")) { 
+        } else if (command.equals("inv")) {
             message = makeInventoryMessage(payloadBytes, length);
         } else if (command.equals("block")) {
             message = makeBlock(payloadBytes, length);
@@ -303,7 +303,7 @@ public class BitcoinSerializer extends MessageSerializer {
      */
     @Override
     public Transaction makeTransaction(byte[] payloadBytes, int offset,
-        int length, byte[] hash) throws ProtocolException {
+                                       int length, byte[] hash) throws ProtocolException {
         Transaction tx = new Transaction(params, payloadBytes, offset, null, this, length);
         if (hash != null)
             tx.setHash(Sha256Hash.wrapReversed(hash));
@@ -317,7 +317,7 @@ public class BitcoinSerializer extends MessageSerializer {
             byte b = in.get();
             // We're looking for a run of bytes that is the same as the packet magic but we want to ignore partial
             // magics that aren't complete. So we keep track of where we're up to with magicCursor.
-            byte expectedByte = (byte)(0xFF & params.getPacketMagic() >>> (magicCursor * 8));
+            byte expectedByte = (byte) (0xFF & params.getPacketMagic() >>> (magicCursor * 8));
             if (b == expectedByte) {
                 magicCursor--;
                 if (magicCursor < 0) {
@@ -342,7 +342,9 @@ public class BitcoinSerializer extends MessageSerializer {
 
 
     public static class BitcoinPacketHeader {
-        /** The largest number of bytes that a header can represent */
+        /**
+         * The largest number of bytes that a header can represent
+         */
         public static final int HEADER_LENGTH = COMMAND_LEN + 4 + 4;
 
         public final byte[] header;

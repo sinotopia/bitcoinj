@@ -48,22 +48,22 @@ import static com.google.common.base.Preconditions.*;
 /**
  * <p>Vends hard-coded {@link StoredBlock}s for blocks throughout the chain. Checkpoints serve two purposes:</p>
  * <ol>
- *    <li>They act as a safety mechanism against huge re-orgs that could rewrite large chunks of history, thus
- *    constraining the block chain to be a consensus mechanism only for recent parts of the timeline.</li>
- *    <li>They allow synchronization to the head of the chain for new wallets/users much faster than syncing all
- *    headers from the genesis block.</li>
+ * <li>They act as a safety mechanism against huge re-orgs that could rewrite large chunks of history, thus
+ * constraining the block chain to be a consensus mechanism only for recent parts of the timeline.</li>
+ * <li>They allow synchronization to the head of the chain for new wallets/users much faster than syncing all
+ * headers from the genesis block.</li>
  * </ol>
- *
+ * <p>
  * <p>Checkpoints are used by the SPV {@link BlockChain} to initialize fresh
  * {@link org.bitcoinj.store.SPVBlockStore}s. They are not used by fully validating mode, which instead has a
  * different concept of checkpoints that are used to hard-code the validity of blocks that violate BIP30 (duplicate
  * coinbase transactions). Those "checkpoints" can be found in NetworkParameters.</p>
- *
+ * <p>
  * <p>The file format consists of the string "CHECKPOINTS 1", followed by a uint32 containing the number of signatures
  * to read. The value may not be larger than 256 (so it could have been a byte but isn't for historical reasons).
  * If the number of signatures is larger than zero, each 65 byte ECDSA secp256k1 signature then follows. The signatures
  * sign the hash of all bytes that follow the last signature.</p>
- *
+ * <p>
  * <p>After the signatures come an int32 containing the number of checkpoints in the file. Then each checkpoint follows
  * one after the other. A checkpoint is 12 bytes for the total work done field, 4 bytes for the height, 80 bytes
  * for the block header and then 1 zero byte at the end (i.e. number of transactions in the block: always zero).</p>
@@ -83,12 +83,16 @@ public class CheckpointManager {
 
     public static final BaseEncoding BASE64 = BaseEncoding.base64().omitPadding();
 
-    /** Loads the default checkpoints bundled with bitcoinj */
+    /**
+     * Loads the default checkpoints bundled with bitcoinj
+     */
     public CheckpointManager(Context context) throws IOException {
         this(context.getParams(), null);
     }
 
-    /** Loads the checkpoints from the given stream */
+    /**
+     * Loads the checkpoints from the given stream
+     */
     public CheckpointManager(NetworkParameters params, @Nullable InputStream inputStream) throws IOException {
         this.params = checkNotNull(params);
         if (inputStream == null)
@@ -106,7 +110,9 @@ public class CheckpointManager {
             throw new IOException("Unsupported format.");
     }
 
-    /** Returns a checkpoints stream pointing to inside the bitcoinj JAR */
+    /**
+     * Returns a checkpoints stream pointing to inside the bitcoinj JAR
+     */
     public static InputStream openStream(NetworkParameters params) {
         return CheckpointManager.class.getResourceAsStream("/" + params.getId() + ".checkpoints.txt");
     }
@@ -202,12 +208,16 @@ public class CheckpointManager {
         }
     }
 
-    /** Returns the number of checkpoints that were loaded. */
+    /**
+     * Returns the number of checkpoints that were loaded.
+     */
     public int numCheckpoints() {
         return checkpoints.size();
     }
 
-    /** Returns a hash of the concatenated checkpoint data. */
+    /**
+     * Returns a hash of the concatenated checkpoint data.
+     */
     public Sha256Hash getDataHash() {
         return dataHash;
     }
@@ -216,7 +226,7 @@ public class CheckpointManager {
      * <p>Convenience method that creates a CheckpointManager, loads the given data, gets the checkpoint for the given
      * time, then inserts it into the store and sets that to be the chain head. Useful when you have just created
      * a new store from scratch and want to use configure it all in one go.</p>
-     *
+     * <p>
      * <p>Note that time is adjusted backwards by a week to account for possible clock drift in the block headers.</p>
      */
     public static void checkpoint(NetworkParameters params, InputStream checkpoints, BlockStore store, long time)

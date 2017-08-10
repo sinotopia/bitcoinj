@@ -47,7 +47,8 @@ public class HttpDiscovery implements PeerDiscovery {
     private static final Logger log = LoggerFactory.getLogger(HttpDiscovery.class);
 
     public static class Details {
-        @Nullable public final ECKey pubkey;
+        @Nullable
+        public final ECKey pubkey;
         public final URI uri;
 
         public Details(@Nullable ECKey pubkey, URI uri) {
@@ -76,7 +77,7 @@ public class HttpDiscovery implements PeerDiscovery {
         this(params, details, new OkHttpClient());
     }
 
-    public HttpDiscovery(NetworkParameters params, Details details,  OkHttpClient client) {
+    public HttpDiscovery(NetworkParameters params, Details details, OkHttpClient client) {
         checkArgument(details.uri.getScheme().startsWith("http"));
         this.details = details;
         this.params = params;

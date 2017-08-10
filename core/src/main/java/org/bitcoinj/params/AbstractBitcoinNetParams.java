@@ -59,6 +59,7 @@ public abstract class AbstractBitcoinNetParams extends NetworkParameters {
 
     /**
      * Checks if we are at a reward halving point.
+     *
      * @param height The height of the previous stored block
      * @return If this is a reward halving point
      */
@@ -68,6 +69,7 @@ public abstract class AbstractBitcoinNetParams extends NetworkParameters {
 
     /**
      * Checks if we are at a difficulty transition point.
+     *
      * @param height The height of the previous stored block
      * @return If this is a difficulty transition point
      */
@@ -77,7 +79,7 @@ public abstract class AbstractBitcoinNetParams extends NetworkParameters {
 
     @Override
     public void checkDifficultyTransitions(final StoredBlock storedPrev, final Block nextBlock,
-    	final BlockStore blockStore) throws VerificationException, BlockStoreException {
+                                           final BlockStore blockStore) throws VerificationException, BlockStoreException {
         final Block prev = storedPrev.getHeader();
 
         // Is this supposed to be a difficulty transition point?

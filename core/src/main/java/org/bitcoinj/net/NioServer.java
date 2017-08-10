@@ -37,7 +37,8 @@ public class NioServer extends AbstractExecutionThreadService {
     private final StreamConnectionFactory connectionFactory;
 
     private final ServerSocketChannel sc;
-    @VisibleForTesting final Selector selector;
+    @VisibleForTesting
+    final Selector selector;
 
     // Handle a SelectionKey which was selected
     private void handleKey(Selector selector, SelectionKey key) throws IOException {

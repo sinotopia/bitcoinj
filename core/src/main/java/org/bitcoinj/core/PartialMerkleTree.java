@@ -25,26 +25,27 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.bitcoinj.core.Utils.*;
+
 import com.google.common.base.Objects;
 
 /**
  * <p>A data structure that contains proofs of block inclusion for one or more transactions, in an efficient manner.</p>
- *
+ * <p>
  * <p>The encoding works as follows: we traverse the tree in depth-first order, storing a bit for each traversed node,
  * signifying whether the node is the parent of at least one matched leaf txid (or a matched txid itself). In case we
  * are at the leaf level, or this bit is 0, its merkle node hash is stored, and its children are not explored further.
  * Otherwise, no hash is stored, but we recurse into both (or the only) child branch. During decoding, the same
  * depth-first traversal is performed, consuming bits and hashes as they were written during encoding.</p>
- *
+ * <p>
  * <p>The serialization is fixed and provides a hard guarantee about the encoded size,
  * <tt>SIZE &lt;= 10 + ceil(32.25*N)</tt> where N represents the number of leaf nodes of the partial tree. N itself
  * is bounded by:</p>
- *
+ * <p>
  * <p>
  * N &lt;= total_transactions<br>
  * N &lt;= 1 + matched_transactions*tree_height
  * </p>
- *
+ * <p>
  * <p><pre>The serialization format:
  *  - uint32     total_transactions (4 bytes)
  *  - varint     number of hashes   (1-3 bytes)
@@ -52,7 +53,7 @@ import com.google.common.base.Objects;
  *  - varint     number of bytes of flag bits (1-3 bytes)
  *  - byte[]     flag bits, packed per 8 in a byte, least significant bit first (&lt;= 2*N-1 bits)
  * The size constraints follow from this.</pre></p>
- * 
+ * <p>
  * <p>Instances of this class are not safe for use by multiple threads.</p>
  */
 public class PartialMerkleTree extends Message {
@@ -64,7 +65,7 @@ public class PartialMerkleTree extends Message {
 
     // txids and internal hashes
     private List<Sha256Hash> hashes;
-    
+
     public PartialMerkleTree(NetworkParameters params, byte[] payloadBytes, int offset) throws ProtocolException {
         super(params, payloadBytes, offset);
     }
@@ -92,7 +93,7 @@ public class PartialMerkleTree extends Message {
         List<Boolean> bitList = new ArrayList<>();
         List<Sha256Hash> hashes = new ArrayList<>();
         traverseAndBuild(height, 0, allLeafHashes, includeBits, bitList, hashes);
-        byte[] bits = new byte[(int)Math.ceil(bitList.size() / 8.0)];
+        byte[] bits = new byte[(int) Math.ceil(bitList.size() / 8.0)];
         for (int i = 0; i < bitList.size(); i++)
             if (bitList.get(i))
                 Utils.setBitLE(bits, i);
@@ -113,7 +114,7 @@ public class PartialMerkleTree extends Message {
 
     @Override
     protected void parse() throws ProtocolException {
-        transactionCount = (int)readUint32();
+        transactionCount = (int) readUint32();
 
         int nHashes = (int) readVarInt();
         hashes = new ArrayList<>(nHashes);
@@ -131,7 +132,7 @@ public class PartialMerkleTree extends Message {
                                          List<Boolean> matchedChildBits, List<Sha256Hash> resultHashes) {
         boolean parentOfMatch = false;
         // Is this node a parent of at least one matched hash?
-        for (int p = pos << height; p < (pos+1) << height && p < allLeafHashes.size(); p++) {
+        for (int p = pos << height; p < (pos + 1) << height && p < allLeafHashes.size(); p++) {
             if (Utils.checkBitLE(includeBits, p)) {
                 parentOfMatch = true;
                 break;
@@ -174,15 +175,15 @@ public class PartialMerkleTree extends Message {
     private static int getTreeWidth(int transactionCount, int height) {
         return (transactionCount + (1 << height) - 1) >> height;
     }
-    
+
     private static class ValuesUsed {
         public int bitsUsed = 0, hashesUsed = 0;
     }
-    
+
     // recursive function that traverses tree nodes, consuming the bits and hashes produced by TraverseAndBuild.
     // it returns the hash of the respective node.
     private Sha256Hash recursiveExtractHashes(int height, int pos, ValuesUsed used, List<Sha256Hash> matchedHashes) throws VerificationException {
-        if (used.bitsUsed >= matchedChildBits.length*8) {
+        if (used.bitsUsed >= matchedChildBits.length * 8) {
             // overflowed the bits array - failure
             throw new VerificationException("PartialMerkleTree overflowed its bits array");
         }
@@ -200,7 +201,7 @@ public class PartialMerkleTree extends Message {
         } else {
             // otherwise, descend into the subtrees to extract matched txids and hashes
             byte[] left = recursiveExtractHashes(height - 1, pos * 2, used, matchedHashes).getBytes(), right;
-            if (pos * 2 + 1 < getTreeWidth(transactionCount, height-1)) {
+            if (pos * 2 + 1 < getTreeWidth(transactionCount, height - 1)) {
                 right = recursiveExtractHashes(height - 1, pos * 2 + 1, used, matchedHashes).getBytes();
                 if (Arrays.equals(right, left))
                     throw new VerificationException("Invalid merkle tree with duplicated left/right branches");
@@ -214,24 +215,24 @@ public class PartialMerkleTree extends Message {
 
     private static Sha256Hash combineLeftRight(byte[] left, byte[] right) {
         return Sha256Hash.wrapReversed(Sha256Hash.hashTwice(
-            reverseBytes(left), 0, 32,
-            reverseBytes(right), 0, 32));
+                reverseBytes(left), 0, 32,
+                reverseBytes(right), 0, 32));
     }
 
     /**
      * Extracts tx hashes that are in this merkle tree
      * and returns the merkle root of this tree.
-     * 
+     * <p>
      * The returned root should be checked against the
      * merkle root contained in the block header for security.
-     * 
+     *
      * @param matchedHashesOut A list which will contain the matched txn (will be cleared).
      * @return the merkle root of this merkle tree
      * @throws ProtocolException if this partial merkle tree is invalid
      */
     public Sha256Hash getTxnHashAndMerkleRoot(List<Sha256Hash> matchedHashesOut) throws VerificationException {
         matchedHashesOut.clear();
-        
+
         // An empty set will not work
         if (transactionCount == 0)
             throw new VerificationException("Got a CPartialMerkleTree with 0 transactions");
@@ -242,7 +243,7 @@ public class PartialMerkleTree extends Message {
         if (hashes.size() > transactionCount)
             throw new VerificationException("Got a CPartialMerkleTree with more hashes than transactions");
         // there must be at least one bit per node in the partial tree, and at least one node per hash
-        if (matchedChildBits.length*8 < hashes.size())
+        if (matchedChildBits.length * 8 < hashes.size())
             throw new VerificationException("Got a CPartialMerkleTree with fewer matched bits than hashes");
         // calculate height of tree
         int height = 0;
@@ -252,11 +253,11 @@ public class PartialMerkleTree extends Message {
         ValuesUsed used = new ValuesUsed();
         Sha256Hash merkleRoot = recursiveExtractHashes(height, 0, used, matchedHashesOut);
         // verify that all bits were consumed (except for the padding caused by serializing it as a byte sequence)
-        if ((used.bitsUsed+7)/8 != matchedChildBits.length ||
+        if ((used.bitsUsed + 7) / 8 != matchedChildBits.length ||
                 // verify that all hashes were consumed
                 used.hashesUsed != hashes.size())
             throw new VerificationException("Got a CPartialMerkleTree that didn't need all the data it provided");
-        
+
         return merkleRoot;
     }
 
@@ -270,7 +271,7 @@ public class PartialMerkleTree extends Message {
         if (o == null || getClass() != o.getClass()) return false;
         PartialMerkleTree other = (PartialMerkleTree) o;
         return transactionCount == other.transactionCount && hashes.equals(other.hashes)
-            && Arrays.equals(matchedChildBits, other.matchedChildBits);
+                && Arrays.equals(matchedChildBits, other.matchedChildBits);
     }
 
     @Override

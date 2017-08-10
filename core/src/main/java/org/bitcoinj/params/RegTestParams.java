@@ -65,6 +65,7 @@ public class RegTestParams extends TestNet2Params {
     }
 
     private static RegTestParams instance;
+
     public static synchronized RegTestParams get() {
         if (instance == null) {
             instance = new RegTestParams();

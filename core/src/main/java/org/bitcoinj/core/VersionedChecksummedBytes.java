@@ -86,7 +86,7 @@ public class VersionedChecksummedBytes implements Serializable, Cloneable, Compa
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * This implementation narrows the return type to <code>VersionedChecksummedBytes</code>
      * and allows subclasses to throw <code>CloneNotSupportedException</code> even though it
      * is never thrown by this implementation.
@@ -98,7 +98,7 @@ public class VersionedChecksummedBytes implements Serializable, Cloneable, Compa
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * This implementation uses an optimized Google Guava method to compare <code>bytes</code>.
      */
     @Override

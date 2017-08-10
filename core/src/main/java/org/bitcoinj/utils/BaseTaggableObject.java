@@ -30,9 +30,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * synchronized on this objects Java monitor.
  */
 public class BaseTaggableObject implements TaggableObject {
-    @Nullable protected Map<String, ByteString> tags;
+    @Nullable
+    protected Map<String, ByteString> tags;
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Nullable
     public synchronized ByteString maybeGetTag(String tag) {
@@ -42,7 +45,9 @@ public class BaseTaggableObject implements TaggableObject {
             return tags.get(tag);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ByteString getTag(String tag) {
         ByteString b = maybeGetTag(tag);
@@ -51,7 +56,9 @@ public class BaseTaggableObject implements TaggableObject {
         return b;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public synchronized void setTag(String tag, ByteString value) {
         checkNotNull(tag);
@@ -61,7 +68,9 @@ public class BaseTaggableObject implements TaggableObject {
         tags.put(tag, value);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public synchronized Map<String, ByteString> getTags() {
         if (tags != null)
